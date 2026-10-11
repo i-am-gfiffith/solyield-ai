@@ -1,0 +1,772 @@
+{
+    "address": "6LfAWRgqdWtUtN1b9H3sXPRPTbQGDirtG9e1Wj5nKydQ",
+    "metadata": {
+        "name": "solyield",
+        "version": "0.1.0",
+        "spec": "0.1.0",
+        "description": "SolYield Lending Protection Program"
+    },
+    "instructions": [
+        {
+            "name": "delegate_session",
+            "discriminator": [
+                82,
+                83,
+                119,
+                119,
+                196,
+                219,
+                5,
+                197
+            ],
+            "accounts": [
+                {
+                    "name": "session",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    115,
+                                    101,
+                                    115,
+                                    115,
+                                    105,
+                                    111,
+                                    110
+                                ]
+                            },
+                            {
+                                "kind": "account",
+                                "path": "vault"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "vault",
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    118,
+                                    97,
+                                    117,
+                                    108,
+                                    116
+                                ]
+                            },
+                            {
+                                "kind": "account",
+                                "path": "authority"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "authority",
+                    "writable": true,
+                    "signer": true,
+                    "relations": [
+                        "vault"
+                    ]
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": [
+                {
+                    "name": "keeper",
+                    "type": "pubkey"
+                },
+                {
+                    "name": "trigger_health_factor_bps",
+                    "type": "u32"
+                },
+                {
+                    "name": "per_tx_repay_cap",
+                    "type": "u64"
+                },
+                {
+                    "name": "cumulative_repay_cap",
+                    "type": "u64"
+                },
+                {
+                    "name": "duration_seconds",
+                    "type": "i64"
+                }
+            ]
+        },
+        {
+            "name": "deposit_reserve",
+            "discriminator": [
+                187,
+                75,
+                224,
+                96,
+                122,
+                233,
+                220,
+                121
+            ],
+            "accounts": [
+                {
+                    "name": "vault",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    118,
+                                    97,
+                                    117,
+                                    108,
+                                    116
+                                ]
+                            },
+                            {
+                                "kind": "account",
+                                "path": "authority"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "authority",
+                    "writable": true,
+                    "signer": true,
+                    "relations": [
+                        "vault"
+                    ]
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": [
+                {
+                    "name": "amount",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "guarded_repay",
+            "discriminator": [
+                235,
+                164,
+                98,
+                128,
+                102,
+                171,
+                150,
+                68
+            ],
+            "accounts": [
+                {
+                    "name": "session",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    115,
+                                    101,
+                                    115,
+                                    115,
+                                    105,
+                                    111,
+                                    110
+                                ]
+                            },
+                            {
+                                "kind": "account",
+                                "path": "vault"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "vault",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    118,
+                                    97,
+                                    117,
+                                    108,
+                                    116
+                                ]
+                            },
+                            {
+                                "kind": "account",
+                                "path": "session.authority",
+                                "account": "Session"
+                            }
+                        ]
+                    },
+                    "relations": [
+                        "session"
+                    ]
+                },
+                {
+                    "name": "obligation",
+                    "writable": true
+                },
+                {
+                    "name": "authority",
+                    "docs": [
+                        "The authority who owns the position and vault"
+                    ],
+                    "relations": [
+                        "obligation"
+                    ]
+                },
+                {
+                    "name": "keeper",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": [
+                {
+                    "name": "repay_amount",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "initialize_obligation",
+            "discriminator": [
+                93,
+                178,
+                46,
+                182,
+                79,
+                238,
+                67,
+                69
+            ],
+            "accounts": [
+                {
+                    "name": "obligation",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    111,
+                                    98,
+                                    108,
+                                    105,
+                                    103,
+                                    97,
+                                    116,
+                                    105,
+                                    111,
+                                    110
+                                ]
+                            },
+                            {
+                                "kind": "account",
+                                "path": "authority"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "authority",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": [
+                {
+                    "name": "collateral_amount",
+                    "type": "u64"
+                },
+                {
+                    "name": "debt_amount",
+                    "type": "u64"
+                },
+                {
+                    "name": "liquidation_threshold_bps",
+                    "type": "u32"
+                },
+                {
+                    "name": "oracle_price",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "initialize_vault",
+            "discriminator": [
+                48,
+                191,
+                163,
+                44,
+                71,
+                129,
+                63,
+                164
+            ],
+            "accounts": [
+                {
+                    "name": "vault",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    118,
+                                    97,
+                                    117,
+                                    108,
+                                    116
+                                ]
+                            },
+                            {
+                                "kind": "account",
+                                "path": "authority"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "authority",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "revoke_session",
+            "discriminator": [
+                86,
+                92,
+                198,
+                120,
+                144,
+                2,
+                7,
+                194
+            ],
+            "accounts": [
+                {
+                    "name": "session",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    115,
+                                    101,
+                                    115,
+                                    115,
+                                    105,
+                                    111,
+                                    110
+                                ]
+                            },
+                            {
+                                "kind": "account",
+                                "path": "session.vault",
+                                "account": "Session"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "authority",
+                    "signer": true,
+                    "relations": [
+                        "session"
+                    ]
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "update_price",
+            "discriminator": [
+                61,
+                34,
+                117,
+                155,
+                75,
+                34,
+                123,
+                208
+            ],
+            "accounts": [
+                {
+                    "name": "obligation",
+                    "writable": true
+                },
+                {
+                    "name": "caller",
+                    "signer": true
+                }
+            ],
+            "args": [
+                {
+                    "name": "new_price",
+                    "type": "u64"
+                }
+            ]
+        },
+        {
+            "name": "withdraw_reserve",
+            "discriminator": [
+                165,
+                158,
+                228,
+                5,
+                114,
+                119,
+                194,
+                14
+            ],
+            "accounts": [
+                {
+                    "name": "vault",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [
+                                    118,
+                                    97,
+                                    117,
+                                    108,
+                                    116
+                                ]
+                            },
+                            {
+                                "kind": "account",
+                                "path": "authority"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "authority",
+                    "writable": true,
+                    "signer": true,
+                    "relations": [
+                        "vault"
+                    ]
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": [
+                {
+                    "name": "amount",
+                    "type": "u64"
+                }
+            ]
+        }
+    ],
+    "accounts": [
+        {
+            "name": "Obligation",
+            "discriminator": [
+                168,
+                206,
+                141,
+                106,
+                88,
+                76,
+                172,
+                167
+            ]
+        },
+        {
+            "name": "Session",
+            "discriminator": [
+                243,
+                81,
+                72,
+                115,
+                214,
+                188,
+                72,
+                144
+            ]
+        },
+        {
+            "name": "Vault",
+            "discriminator": [
+                211,
+                8,
+                232,
+                43,
+                2,
+                152,
+                117,
+                119
+            ]
+        }
+    ],
+    "events": [
+        {
+            "name": "RepayExecuted",
+            "discriminator": [
+                108,
+                8,
+                173,
+                229,
+                249,
+                69,
+                3,
+                83
+            ]
+        }
+    ],
+    "errors": [
+        {
+            "code": 6000,
+            "name": "SessionExpired",
+            "msg": "Session key has expired"
+        },
+        {
+            "code": 6001,
+            "name": "SessionInactive",
+            "msg": "Session is inactive or has been revoked"
+        },
+        {
+            "code": 6002,
+            "name": "UnauthorizedKeeper",
+            "msg": "Unauthorized keeper key"
+        },
+        {
+            "code": 6003,
+            "name": "HealthFactorAboveTrigger",
+            "msg": "Health factor is currently above the trigger threshold; repayment not allowed"
+        },
+        {
+            "code": 6004,
+            "name": "ExceedsPerTxCap",
+            "msg": "Repay amount exceeds per-transaction cap configured in session"
+        },
+        {
+            "code": 6005,
+            "name": "ExceedsCumulativeCap",
+            "msg": "Repay amount exceeds cumulative cap configured in session"
+        },
+        {
+            "code": 6006,
+            "name": "InsufficientReserve",
+            "msg": "Insufficient reserve funds in vault"
+        },
+        {
+            "code": 6007,
+            "name": "NoDebtToRepay",
+            "msg": "Position is already zero debt or invalid"
+        },
+        {
+            "code": 6008,
+            "name": "InvalidPrice",
+            "msg": "Invalid oracle price supplied"
+        },
+        {
+            "code": 6009,
+            "name": "InvalidTriggerThreshold",
+            "msg": "Trigger health factor is out of allowable bounds (1.05 to 2.00)"
+        },
+        {
+            "code": 6010,
+            "name": "MathOverflow",
+            "msg": "Arithmetic overflow occurred"
+        }
+    ],
+    "types": [
+        {
+            "name": "Obligation",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "authority",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "collateral_amount",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "debt_amount",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "liquidation_threshold_bps",
+                        "type": "u32"
+                    },
+                    {
+                        "name": "oracle_price",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "last_updated_slot",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "RepayExecuted",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "authority",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "keeper",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "vault",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "amount_repaid",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "old_health_factor_bps",
+                        "type": "u32"
+                    },
+                    {
+                        "name": "new_health_factor_bps",
+                        "type": "u32"
+                    },
+                    {
+                        "name": "remaining_debt",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "remaining_reserve",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "slot",
+                        "type": "u64"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Session",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "vault",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "authority",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "keeper",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "trigger_health_factor_bps",
+                        "type": "u32"
+                    },
+                    {
+                        "name": "per_tx_repay_cap",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "cumulative_repay_cap",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "total_repaid",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "expiry_timestamp",
+                        "type": "i64"
+                    },
+                    {
+                        "name": "is_active",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Vault",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "authority",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "reserve_balance",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "total_repaid_all_time",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "created_at",
+                        "type": "i64"
+                    },
+                    {
+                        "name": "bump",
+                        "type": "u8"
+                    }
+                ]
+            }
+        }
+    ]
+}

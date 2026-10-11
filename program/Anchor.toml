@@ -1,0 +1,21 @@
+[toolchain]
+package_manager = "yarn"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+solyield = "6LfAWRgqdWtUtN1b9H3sXPRPTbQGDirtG9e1Wj5nKydQ"
+
+[programs.devnet]
+solyield = "6LfAWRgqdWtUtN1b9H3sXPRPTbQGDirtG9e1Wj5nKydQ"
+
+[provider]
+cluster = "devnet"
+wallet = "~/.config/solana/id.json"
+
+[scripts]
+test = "cargo test"
+
+[hooks]
